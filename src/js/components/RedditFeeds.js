@@ -1,13 +1,12 @@
 import React from 'react'
-// import FetchData from 'FetchData.js'
 
 class RedditFeeds extends React.Component {
+
   render() {
-    return (
-      <div>
-        RedditFeeds component
-      </div>
-    )
+    return (<div/>)
+      // make ajax request in componentDidMount. map trought props
+      // (an array of subreddit names), and spawn redditfeed dumb components
+
   }
 }
 
