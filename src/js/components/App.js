@@ -11,7 +11,7 @@ class App extends Component {
     super();
     this.state = {
       redditValue: '',
-      subreddits: []
+      redditFeeds: ["globaloffensive"]
     }
     this.handleRedditChange = this.handleRedditChange.bind(this);
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this);
@@ -25,19 +25,20 @@ class App extends Component {
 
   handleRedditSubmit(event){
     event.preventDefault();
-    let subredditArray = [...this.state.subreddits, this.state.redditValue]
-    this.setState({subreddits: subredditArray});
+    let redditArray = [...this.state.redditFeeds, this.state.redditValue]
+    this.setState({
+      redditFeeds: redditArray,
+      redditValue: ""
+    });
   }
 
 
   handleYoutubeChange(event){
     this.setState({redditValue: event.target.value});
-    console.log("changed")
   }
 
   handleYoutubeSubmit(event){
     event.preventDefault();
-    console.log('Field has changed to ' + this.state.redditValue);
   }
 
   render() {
@@ -51,6 +52,7 @@ class App extends Component {
                 handleChange={this.handleRedditChange}
                 handleSubmit={this.handleRedditSubmit}
                 name="Subreddit"
+                value={this.state.redditValue}
               />
             </Grid.Column>
             <Grid.Column width={8}>
@@ -58,14 +60,15 @@ class App extends Component {
                 handleChange={this.handleYoutubeChange}
                 handleSubmit={this.handleYoutubeSubmit}
                 name="Youtube"
+                value={this.state.redditValue}
               />
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <Card.Group itemsPerRow={3} stackable>
-          <Hackernews/>
-          {this.state.subreddits.map(subreddit => {
-            return <RedditFeed key={subreddit} subreddit={subreddit}/>
+          <Hackernews doubling/>
+          {this.state.redditFeeds.map(redditFeedName => {
+            return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
           })}
         </Card.Group>
       </Container>

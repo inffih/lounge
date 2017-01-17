@@ -1,37 +1,38 @@
 import React from 'react'
-import SubredditFeedItem from './SubredditFeedItem'
+import RedditFeedItem from './RedditFeedItem'
 import Axios from 'axios'
 import { Card } from 'semantic-ui-react'
-import * as subredditData from '../../tempdata/reddit.json'
 
-class Subreddit extends React.Component {
+class RedditFeed extends React.Component {
 
   constructor(){
     super()
     this.state = {
-      subredditData: subredditData.data.children
+      redditData: []
     }
   }
 
   componentDidMount(){
-    // Axios.get('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty')
-    //   .then(response =>{
-    //     this.loopNews(response.data)
-    //   })
+    let url = "https://www.reddit.com/r/" + this.props.redditFeedName + "/top.json?limit=10"
+    Axios.get(url)
+      .then(response =>{
+        this.setState({
+          redditData: response.data.data.children
+        })
+      })
   }
 
   render() {
     return (
       <Card>
-      {console.log(this.state.subredditData)}
         <Card.Content>
           <Card.Header>
-            r/{this.props.subreddit}
+            r/{this.props.redditFeedName}
           </Card.Header>
         </Card.Content>
         <Card.Content>
-          {this.state.subredditData.map(item => {
-            return <SubredditFeedItem key={item.data.id} item={item}/>
+          {this.state.redditData.map(item => {
+            return <RedditFeedItem key={item.data.id} item={item}/>
           })}
         </Card.Content>
       </Card>
@@ -39,4 +40,4 @@ class Subreddit extends React.Component {
   }
 }
 
-export default Subreddit
+export default RedditFeed

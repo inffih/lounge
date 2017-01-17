@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'semantic-ui-react'
 
-const AddFeedField = ({handleChange, handleSubmit, name}) => (
+const AddFeedField = ({handleChange, handleSubmit, name, value}) => (
   <Form onSubmit={handleSubmit}>
     <Form.Input
       icon={{
@@ -11,6 +11,7 @@ const AddFeedField = ({handleChange, handleSubmit, name}) => (
         circular: true,
         link: true
       }}
+      value={value}
       placeholder={name}
       onChange={handleChange}
       name={name + "field"}
