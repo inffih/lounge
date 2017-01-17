@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import Hackernews from './Hackernews'
-// import RedditFeeds from './RedditFeeds'
+import RedditFeed from './RedditFeed'
 // import YoutubeFeeds from './YoutubeFeeds'
-import { Divider, Grid, Container, Card, Header } from 'semantic-ui-react'
+import { Grid, Container, Card, Header } from 'semantic-ui-react'
 import AddFeedField from './AddFeedField.js'
 
 class App extends Component {
 
   constructor(){
     super();
-    this.state = { redditValue: ''}
+    this.state = {
+      redditValue: '',
+      subreddits: []
+    }
     this.handleRedditChange = this.handleRedditChange.bind(this);
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this);
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this);
@@ -18,12 +21,12 @@ class App extends Component {
 
   handleRedditChange(event){
     this.setState({redditValue: event.target.value});
-    console.log("changed")
   }
 
   handleRedditSubmit(event){
     event.preventDefault();
-    console.log('Field has changed to ' + this.state.redditValue);
+    let subredditArray = [...this.state.subreddits, this.state.redditValue]
+    this.setState({subreddits: subredditArray});
   }
 
 
@@ -61,9 +64,9 @@ class App extends Component {
         </Grid>
         <Card.Group itemsPerRow={3} stackable>
           <Hackernews/>
-          <Hackernews/>
-          <Hackernews/>
-          <Hackernews/>
+          {this.state.subreddits.map(subreddit => {
+            return <RedditFeed key={subreddit} subreddit={subreddit}/>
+          })}
         </Card.Group>
       </Container>
     );
