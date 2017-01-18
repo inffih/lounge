@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
-// import YoutubeFeeds from './YoutubeFeeds'
+import YoutubeFeed from './YoutubeFeed'
 import { Grid, Container, Card, Header } from 'semantic-ui-react'
 import AddFeedField from './AddFeedField.js'
 
@@ -11,7 +11,7 @@ class App extends Component {
     super();
     this.state = {
       redditValue: '',
-      redditFeeds: ["globaloffensive"]
+      redditFeeds: []
     }
     this.handleRedditChange = this.handleRedditChange.bind(this);
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this);
@@ -53,6 +53,8 @@ class App extends Component {
                 handleSubmit={this.handleRedditSubmit}
                 name="Subreddit"
                 value={this.state.redditValue}
+                labelText='Add subreddit'
+                defaultText='e.g. "All"'
               />
             </Grid.Column>
             <Grid.Column width={8}>
@@ -61,15 +63,13 @@ class App extends Component {
                 handleSubmit={this.handleYoutubeSubmit}
                 name="Youtube"
                 value={this.state.redditValue}
+                labelText='Add YouTube channel'
+                defaultText='e.g. "Google"'
               />
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <Card.Group itemsPerRow={3} stackable>
-          <Hackernews doubling/>
-          {this.state.redditFeeds.map(redditFeedName => {
-            return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
-          })}
         </Card.Group>
       </Container>
     );
@@ -77,3 +77,9 @@ class App extends Component {
 }
 
 export default App;
+
+// <Hackernews />
+// <YoutubeFeed username="2bcproductions"/>
+// {this.state.redditFeeds.map(redditFeedName => {
+//   return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+// })}
