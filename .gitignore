@@ -7,8 +7,6 @@ build
 .env
 npm-debug.log
 
-tempdata
-
 # Created by https://www.gitignore.io/api/windo,windows,linux,osx,node
 
 #!! ERROR: windo is undefined. Use list command to see defined gitignore types !!#
