@@ -4,11 +4,13 @@ import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
 import { Grid, Container, Card, Header, Radio } from 'semantic-ui-react'
 import AddFeedField from './AddFeedField.js'
+import * as LocalForage from 'localforage'
 
 class App extends Component {
 
   constructor(){
     super();
+
     this.state = {
       redditValue: '',
       redditFeeds: [],
@@ -16,11 +18,51 @@ class App extends Component {
       youtubeFeeds: [],
       hackernewsVisible: false
     }
+
     this.handleRedditChange = this.handleRedditChange.bind(this);
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this);
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this);
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this);
     this.toggleHackernews = this.toggleHackernews.bind(this);
+
+  }
+
+
+  componentDidMount(){
+    let self = this
+
+    LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
+      console.log(localRedditFeeds)
+      if (localRedditFeeds != null){
+        self.setState({redditFeeds: localRedditFeeds})
+      }
+
+    })
+    LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
+      console.log(localYoutubeFeeds)
+      if (localYoutubeFeeds != null){
+        self.setState({youtubeFeeds: localYoutubeFeeds})
+      }
+
+    })
+    LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
+      if (localHackernewsVisible != null){
+        console.log(localHackernewsVisible)
+        self.setState({hackernewsVisible: localHackernewsVisible})
+      }
+    })
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.redditFeeds !== this.state.redditFeeds){
+      LocalForage.setItem('localRedditFeeds', this.state.redditFeeds)
+    }
+    if(prevState.youtubeFeeds !== this.state.youtubeFeeds){
+      LocalForage.setItem('localYoutubeFeeds', this.state.youtubeFeeds)
+    }
+    if(prevState.hackernewsVisible !== this.state.hackernewsVisible){
+      LocalForage.setItem('localHackernewsVisible', this.state.hackernewsVisible)
+    }
   }
 
   handleRedditChange(event){
@@ -34,6 +76,7 @@ class App extends Component {
       redditFeeds: redditArray,
       redditValue: ""
     });
+
   }
 
   handleYoutubeChange(event){

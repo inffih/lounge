@@ -2,6 +2,7 @@ import React from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
 import { Card } from 'semantic-ui-react'
+import LoaderComponent from './LoaderComponent'
 import * as config from '../../tempdata/api.config.json'
 
 class YoutubeFeed extends React.Component {
@@ -9,7 +10,8 @@ class YoutubeFeed extends React.Component {
   constructor(){
     super()
     this.state = {
-      youtubeData: []
+      youtubeData: [],
+      fetching: false
     }
   }
 
@@ -24,7 +26,8 @@ class YoutubeFeed extends React.Component {
     })
       .then(response => {
         this.setState({
-          youtubeData: response.data.items
+          youtubeData: response.data.items,
+          fetching: false
         })
       })
       .catch(function (error) {
@@ -34,6 +37,11 @@ class YoutubeFeed extends React.Component {
 
 
   componentDidMount(){
+    this.fetchChannel()
+  }
+
+  fetchChannel(){
+    this.setState({fetching: true})
     Axios.get('https://www.googleapis.com/youtube/v3/channels', {
       params: {
         part: "contentDetails",
@@ -50,24 +58,36 @@ class YoutubeFeed extends React.Component {
       });
   }
 
-
-
   render() {
-    return (
-      <Card>
-        <Card.Content>
-          <Card.Header>
-            {this.props.username}
-          </Card.Header>
-        </Card.Content>
-        <Card.Content>
-          {this.state.youtubeData.map(item => {
-            return <YoutubeFeedItem key={item.id} item={item.snippet}/>
-          })}
-        </Card.Content>
-      </Card>
-    )
-  }
+    if(this.state.fetching){
+      return (
+        <Card>
+          <Card.Content>
+            <Card.Header>
+              {this.props.username}
+            </Card.Header>
+          </Card.Content>
+          <Card.Content>
+            <LoaderComponent/>
+          </Card.Content>
+        </Card>
+      )} else {
+        return (
+          <Card>
+            <Card.Content>
+              <Card.Header>
+                {this.props.username}
+              </Card.Header>
+            </Card.Content>
+            <Card.Content>
+              {this.state.youtubeData.map(item => {
+                return <YoutubeFeedItem key={item.id} item={item.snippet}/>
+              })}
+            </Card.Content>
+          </Card>
+        )
+      }
+    }
 }
 
 export default YoutubeFeed
