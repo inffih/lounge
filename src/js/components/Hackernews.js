@@ -2,7 +2,7 @@ import React from 'react'
 import HackernewsFeedItem from './HackernewsFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card, Dimmer, Loader } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 
 class Hackernews extends React.Component {
 
@@ -28,20 +28,23 @@ class Hackernews extends React.Component {
 
   loopNews(ids) {
     let url = "";
-    ids.slice(0, 10).map((id, index) => {
-      url = 'https://hacker-news.firebaseio.com/v0/item/' + id + '.json?print=pretty';
-      Axios.get(url)
-        .then(response => {
-          let newsArray = [...this.state.news, response.data]
-          this.setState({news: newsArray})
-        })
-        .catch(function(error){
-          console.log(error)
-        })
-      if(index === 9){
-        this.setState({fetching: false})
-      }
-    })
+    return (
+      ids.slice(0, 10).map((id, index) => {
+        url = 'https://hacker-news.firebaseio.com/v0/item/' + id + '.json?print=pretty'
+        Axios.get(url)
+          .then(response => {
+            let newsArray = [...this.state.news, response.data]
+            this.setState({news: newsArray})
+          })
+          .catch(function(error){
+            console.log(error)
+          })
+        if(index === 9){
+          this.setState({fetching: false})
+        }
+        return this.state.newsArray
+      })
+    )
   }
 
   render() {

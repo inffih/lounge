@@ -5,6 +5,7 @@ import YoutubeFeed from './YoutubeFeed'
 import { Grid, Container, Card, Header, Radio } from 'semantic-ui-react'
 import AddFeedField from './AddFeedField.js'
 import * as LocalForage from 'localforage'
+import CustomLinks from './CustomLinks'
 
 class App extends Component {
 
@@ -16,7 +17,12 @@ class App extends Component {
       redditFeeds: [],
       youtubeValue: '',
       youtubeFeeds: [],
-      hackernewsVisible: false
+      hackernewsVisible: false,
+      customLinks:[
+        {url: 'google.com', name: 'google'},
+        {url: 'yahoo.com', name: 'yahoo'}
+      ]
+
     }
 
     this.handleRedditChange = this.handleRedditChange.bind(this);
@@ -32,14 +38,12 @@ class App extends Component {
     let self = this
 
     LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
-      console.log(localRedditFeeds)
       if (localRedditFeeds != null){
         self.setState({redditFeeds: localRedditFeeds})
       }
 
     })
     LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-      console.log(localYoutubeFeeds)
       if (localYoutubeFeeds != null){
         self.setState({youtubeFeeds: localYoutubeFeeds})
       }
@@ -47,7 +51,6 @@ class App extends Component {
     })
     LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
       if (localHackernewsVisible != null){
-        console.log(localHackernewsVisible)
         self.setState({hackernewsVisible: localHackernewsVisible})
       }
     })
@@ -128,6 +131,7 @@ class App extends Component {
               </Grid.Column>
           </Grid.Row>
         </Grid>
+        <CustomLinks links={this.state.customLinks} />
         <Card.Group itemsPerRow={3} stackable>
           { this.state.hackernewsVisible && <Hackernews />}
           {this.state.redditFeeds.map(redditFeedName => {

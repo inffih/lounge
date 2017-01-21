@@ -7,9 +7,7 @@ build
 .env
 npm-debug.log
 
-# Created by https://www.gitignore.io/api/windo,windows,linux,osx,node
-
-#!! ERROR: windo is undefined. Use list command to see defined gitignore types !!#
+# Created by https://www.gitignore.io/api/windows,linux,osx,node
 
 ### Windows ###
 # Windows thumbnail cache files
