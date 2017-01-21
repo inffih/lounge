@@ -127,7 +127,7 @@ class App extends Component {
             </Grid.Column>
               <Grid.Column width={4}>
                 <Header as="h5">Show Hackernews</Header>
-                <Radio toggle onClick={this.toggleHackernews} />
+                <Radio toggle onClick={this.toggleHackernews} checked={this.state.hackernewsVisible}/>
               </Grid.Column>
           </Grid.Row>
         </Grid>
