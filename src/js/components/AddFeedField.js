@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Header } from 'semantic-ui-react'
 
+// Input field UI component for adding new feeds on the page
 const AddFeedField = ({handleChange, handleSubmit, name, value, labelText, defaultText}) => (
   <Form onSubmit={handleSubmit}>
     <Header size="tiny">{labelText}</Header>
@@ -19,6 +20,5 @@ const AddFeedField = ({handleChange, handleSubmit, name, value, labelText, defau
     />
   </Form>
 )
-
 
 export default AddFeedField;

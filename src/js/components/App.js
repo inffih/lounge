@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
-import { Grid, Container, Card, Header, Radio } from 'semantic-ui-react'
+import { Grid, Container, Header, Radio } from 'semantic-ui-react'
 import AddFeedField from './AddFeedField.js'
-import * as LocalForage from 'localforage'
+import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
 
 class App extends Component {
 
   constructor(){
     super();
+
+    // LocalForage.clear()
 
     this.state = {
       redditValue: '',
@@ -20,7 +22,11 @@ class App extends Component {
       hackernewsVisible: false,
       customLinks:[
         {url: 'google.com', name: 'google'},
-        {url: 'yahoo.com', name: 'yahoo'}
+        {url: 'yahoo.com', name: 'yahoo'},
+        {url: 'customlink.com', name: 'customlink'},
+        {url: 'anothercustomlink.com', name: 'anothercustomlink'},
+        {url: 'baidu.com', name: 'baidu'},
+        {url: 'bing.com', name: 'bing'}
       ]
 
     }
@@ -54,6 +60,7 @@ class App extends Component {
         self.setState({hackernewsVisible: localHackernewsVisible})
       }
     })
+
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -105,7 +112,7 @@ class App extends Component {
         <Header dividing size="huge" color="blue">Lounge</Header>
         <Grid>
           <Grid.Row>
-            <Grid.Column width={6}>
+            <Grid.Column mobile={16} tablet={8} computer={4}>
               <AddFeedField
                 handleChange={this.handleRedditChange}
                 handleSubmit={this.handleRedditSubmit}
@@ -115,7 +122,7 @@ class App extends Component {
                 defaultText='e.g. "All"'
               />
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column mobile={16} tablet={8} computer={4}>
               <AddFeedField
                 handleChange={this.handleYoutubeChange}
                 handleSubmit={this.handleYoutubeSubmit}
@@ -125,22 +132,34 @@ class App extends Component {
                 defaultText='e.g. "Google"'
               />
             </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column mobile={16} tablet={8} computer={4}>
                 <Header as="h5">Show Hackernews</Header>
                 <Radio toggle onClick={this.toggleHackernews} checked={this.state.hackernewsVisible}/>
               </Grid.Column>
           </Grid.Row>
+          <Grid.Row>
+            <Grid.Column mobile={16} tablet={16} computer={16}>
+            <CustomLinks links={this.state.customLinks} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+
+            { this.state.hackernewsVisible && <Hackernews />}
+
+            {
+              this.state.redditFeeds.map(redditFeedName => {
+                return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+              })
+            }
+
+            {
+              this.state.youtubeFeeds.map(youtubeFeedName => {
+                return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
+              })
+            }
+
+          </Grid.Row>
         </Grid>
-        <CustomLinks links={this.state.customLinks} />
-        <Card.Group itemsPerRow={3} stackable>
-          { this.state.hackernewsVisible && <Hackernews />}
-          {this.state.redditFeeds.map(redditFeedName => {
-          return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
-          })}
-          {this.state.youtubeFeeds.map(youtubeFeedName => {
-            return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
-          })}
-        </Card.Group>
       </Container>
     );
   }

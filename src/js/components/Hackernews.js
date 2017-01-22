@@ -2,23 +2,42 @@ import React from 'react'
 import HackernewsFeedItem from './HackernewsFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card } from 'semantic-ui-react'
+import { Card, Grid } from 'semantic-ui-react'
+import LocalForage from 'localforage'
 
 class Hackernews extends React.Component {
 
+  // State includes news array and fetching boolean
   constructor(){
+
     super()
     this.state = {
       news: [],
       fetching: false
     }
+    this.showLoading = this.showLoading.bind(this);
+    this.showContent = this.showContent.bind(this);
   }
 
+  // Check if news array exist locally, if not, fetch from api
   componentDidMount(){
-    this.fetchNews()
+
+    let self = this
+    LocalForage.getItem('localHackernews').then(function(localHackernews){
+      if (localHackernews != null){
+        console.log("using localforage HN")
+        self.setState({news: localHackernews})
+      }
+      else {
+        console.log("fetching HN")
+        self.fetchNews()
+      }
+    })
   }
 
+  // Fetch news IDs and pass them to loopNews
   fetchNews(){
+
     this.setState({fetching: true})
     Axios.get('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty')
       .then(response =>{
@@ -26,6 +45,7 @@ class Hackernews extends React.Component {
     })
   }
 
+  // Use fetchNews' IDs to fetch the actual news
   loopNews(ids) {
     let url = "";
     return (
@@ -35,48 +55,61 @@ class Hackernews extends React.Component {
           .then(response => {
             let newsArray = [...this.state.news, response.data]
             this.setState({news: newsArray})
+            if(index === 9){
+              this.setState({fetching: false})
+              LocalForage.setItem('localHackernews', this.state.news)
+            }
           })
           .catch(function(error){
             console.log(error)
           })
-        if(index === 9){
-          this.setState({fetching: false})
-        }
         return this.state.newsArray
       })
     )
   }
 
+  // UI component for loading state
+  showLoading(){
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>
+            Hackernews
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <LoaderComponent/>
+        </Card.Content>
+      </Card>
+    )
+  }
+
+  // UI component for posts
+  showContent(){
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>
+            Hackernews
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          {this.state.news.map(item => {
+            return <HackernewsFeedItem key={item.id} item={item}/>
+          })}
+        </Card.Content>
+      </Card>
+    )
+  }
+
+  // Check if fetching or not, and show UI components accordingly
   render() {
-    if(this.state.fetching){
-      return (
-        <Card>
-          <Card.Content>
-            <Card.Header>
-              Hackernews
-            </Card.Header>
-          </Card.Content>
-          <Card.Content>
-            <LoaderComponent/>
-          </Card.Content>
-        </Card>
-      )
-    } else {
-      return (
-        <Card>
-          <Card.Content>
-            <Card.Header>
-              Hackernews
-            </Card.Header>
-          </Card.Content>
-          <Card.Content>
-            {this.state.news.map(item => {
-              return <HackernewsFeedItem key={item.id} item={item}/>
-            })}
-          </Card.Content>
-        </Card>
-      )
-    }
+    return (
+      <Grid.Column mobile={16} tablet={8} computer={8}>
+        { this.state.fetching === true && <this.showLoading /> }
+        { this.state.fetching === false && <this.showContent /> }
+      </Grid.Column>
+    )
   }
 }
 

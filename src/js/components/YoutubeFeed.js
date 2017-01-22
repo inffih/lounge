@@ -1,45 +1,41 @@
 import React from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
-import { Card } from 'semantic-ui-react'
+import { Card, Grid } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
 import * as config from '../../tempdata/api.config.json'
+import LocalForage from 'localforage'
 
 class YoutubeFeed extends React.Component {
 
+  // State includes youtubeData array for videos and fetching boolean
   constructor(){
     super()
     this.state = {
       youtubeData: [],
       fetching: false
     }
+    this.showLoading = this.showLoading.bind(this);
+    this.showContent = this.showContent.bind(this);
   }
 
-  fetchVideos(id){
-    Axios.get('https://www.googleapis.com/youtube/v3/playlistItems', {
-      params: {
-        part: "snippet",
-        maxResults: 4,
-        playlistId: id,
-        key: config.key
+  // Check if youtubeData exist locally, if not, fetch from api
+  componentDidMount(){
+    let self = this
+    LocalForage.getItem('localYoutubeData').then(function(localYoutubeData){
+      if (localYoutubeData != null){
+        console.log("using localforage youtube")
+        self.setState({youtubeData: localYoutubeData})
+      }
+      else {
+        console.log("fetching youtube")
+        self.fetchChannel()
       }
     })
-      .then(response => {
-        this.setState({
-          youtubeData: response.data.items,
-          fetching: false
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
-
-  componentDidMount(){
-    this.fetchChannel()
-  }
-
+  // Fetch channel details by username
+  // Then pass along the "uploads"-playlist ID to fetchVideos
   fetchChannel(){
     this.setState({fetching: true})
     Axios.get('https://www.googleapis.com/youtube/v3/channels', {
@@ -58,36 +54,72 @@ class YoutubeFeed extends React.Component {
       });
   }
 
-  render() {
-    if(this.state.fetching){
-      return (
-        <Card>
-          <Card.Content>
-            <Card.Header>
-              {this.props.username}
-            </Card.Header>
-          </Card.Content>
-          <Card.Content>
-            <LoaderComponent/>
-          </Card.Content>
-        </Card>
-      )} else {
-        return (
-          <Card>
-            <Card.Content>
-              <Card.Header>
-                {this.props.username}
-              </Card.Header>
-            </Card.Content>
-            <Card.Content>
-              {this.state.youtubeData.map(item => {
-                return <YoutubeFeedItem key={item.id} item={item.snippet}/>
-              })}
-            </Card.Content>
-          </Card>
-        )
+  // Fetch videos by fetchChannel's playlist ID and set the response to state
+  fetchVideos(id){
+    Axios.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+      params: {
+        part: "snippet",
+        maxResults: 4,
+        playlistId: id,
+        key: config.key
       }
-    }
+    })
+      .then(response => {
+        this.setState({
+          youtubeData: response.data.items,
+          fetching: false
+        })
+        LocalForage.setItem('localYoutubeData', this.state.youtubeData)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // UI component for loading state
+  showLoading(){
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>
+            {this.props.username}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <LoaderComponent/>
+        </Card.Content>
+      </Card>
+    )
+  }
+
+  // UI component for videolist
+  showContent() {
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>
+            {this.props.username}
+          </Card.Header>
+        </Card.Content>
+        <Card.Content>
+          {this.state.youtubeData.map(item => {
+            return <YoutubeFeedItem key={item.id} item={item.snippet}/>
+          })}
+        </Card.Content>
+      </Card>
+    )
+  }
+
+  // Check if fetching or not, and show UI components accordingly
+  render() {
+    return (
+      <Grid.Column mobile={16} tablet={8} computer={8}>
+        { (this.state.fetching === true) && <this.showLoading/> }
+        { (this.state.fetching === false) && <this.showContent/> }
+      </Grid.Column>
+    )
+  }
+
 }
 
 export default YoutubeFeed

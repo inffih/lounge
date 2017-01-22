@@ -1,6 +1,7 @@
 import React from 'react'
 import { Feed } from 'semantic-ui-react'
 
+// URL in which we append the post id to get the link for comments page
 let url = "https://news.ycombinator.com/item?id=";
 
 const HackernewsFeedItem = ({item}) => (

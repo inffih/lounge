@@ -1,12 +1,21 @@
 import React from 'react'
-import CustomLinksItem from './CustomLinksItem'
+import { List } from 'semantic-ui-react'
 
 const CustomLinks = ({links}) => (
-  <div>
+  <List celled horizontal>
     {links.map((link, index) => {
-      return <CustomLinksItem key={index} url={link.url} name={link.name}/>
+      return (
+        <List.Item
+          key={index}
+          as="a"
+          href={link.url}
+          target="_blank"
+        >
+          {link.name}
+        </List.Item>
+      )
     })}
-  </div>
+  </List>
 )
 
 export default CustomLinks
