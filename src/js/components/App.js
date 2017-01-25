@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
-import { Grid, Container, Header, Radio } from 'semantic-ui-react'
-import AddFeedField from './AddFeedField.js'
+import { Grid, Container, Header } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
+import Masonry from 'react-masonry-component'
+import Menu from './Menu'
 
 class App extends Component {
 
@@ -19,6 +20,7 @@ class App extends Component {
       redditFeeds: [],
       youtubeValue: '',
       youtubeFeeds: [],
+      allFeedsArray: [],
       hackernewsVisible: false,
       customLinks:[
         {url: 'google.com', name: 'google'},
@@ -28,7 +30,6 @@ class App extends Component {
         {url: 'baidu.com', name: 'baidu'},
         {url: 'bing.com', name: 'bing'}
       ]
-
     }
 
     this.handleRedditChange = this.handleRedditChange.bind(this);
@@ -36,9 +37,7 @@ class App extends Component {
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this);
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this);
     this.toggleHackernews = this.toggleHackernews.bind(this);
-
   }
-
 
   componentDidMount(){
     let self = this
@@ -86,7 +85,6 @@ class App extends Component {
       redditFeeds: redditArray,
       redditValue: ""
     });
-
   }
 
   handleYoutubeChange(event){
@@ -107,57 +105,45 @@ class App extends Component {
   }
 
   render() {
+
+    let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
+      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+    })
+
+    let youtubeFeedsArray = this.state.youtubeFeeds.map(youtubeFeedName => {
+      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
+    })
+
+    // if (this.state.hackernewsVisible && <Hackernews />) {
+    //   this.setState(...this.state.allFeedsArray, <Hackernews /> )
+    // }
+
+
+    // add all individual component arrays to one big array
+    // feed that array as props to Masonry UI component
+
     return (
       <Container>
         <Header dividing size="huge" color="blue">Lounge</Header>
         <Grid>
-          <Grid.Row>
-            <Grid.Column mobile={16} tablet={8} computer={4}>
-              <AddFeedField
-                handleChange={this.handleRedditChange}
-                handleSubmit={this.handleRedditSubmit}
-                name="Subreddit"
-                value={this.state.redditValue}
-                labelText='Add subreddit'
-                defaultText='e.g. "All"'
-              />
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={8} computer={4}>
-              <AddFeedField
-                handleChange={this.handleYoutubeChange}
-                handleSubmit={this.handleYoutubeSubmit}
-                name="Youtube"
-                value={this.state.youtubeValue}
-                labelText='Add YouTube channel'
-                defaultText='e.g. "Google"'
-              />
-            </Grid.Column>
-              <Grid.Column mobile={16} tablet={8} computer={4}>
-                <Header as="h5">Show Hackernews</Header>
-                <Radio toggle onClick={this.toggleHackernews} checked={this.state.hackernewsVisible}/>
-              </Grid.Column>
-          </Grid.Row>
+            <Menu
+            handleRedditChange={this.handleRedditChange}
+            handleRedditSubmit={this.handleRedditSubmit}
+            redditValue={this.state.redditValue}
+            handleYoutubeChange={this.handleYoutubeChange}
+            handleYoutubeSubmit={this.handleYoutubeSubmit}
+            youtubeValue={this.state.youtubeValue}
+            toggleHackernews={this.toggleHackernews}
+            hackernewsVisible={this.state.hackernewsVisible}
+            />
           <Grid.Row>
             <Grid.Column mobile={16} tablet={16} computer={16}>
-            <CustomLinks links={this.state.customLinks} />
+              <CustomLinks links={this.state.customLinks} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-
-            { this.state.hackernewsVisible && <Hackernews />}
-
-            {
-              this.state.redditFeeds.map(redditFeedName => {
-                return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
-              })
-            }
-
-            {
-              this.state.youtubeFeeds.map(youtubeFeedName => {
-                return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
-              })
-            }
-
+            {redditFeedsArray}
+            {youtubeFeedsArray}
           </Grid.Row>
         </Grid>
       </Container>
