@@ -7,6 +7,8 @@ import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
 import Masonry from 'react-masonry-component'
 import Menu from './Menu'
+import IntroMessage from './IntroMessage'
+import PageHeader from './PageHeader'
 
 class App extends Component {
 
@@ -22,6 +24,7 @@ class App extends Component {
       youtubeFeeds: [],
       allFeedsArray: [],
       hackernewsVisible: false,
+      introMessageVisible: true,
       customLinks:[
         {url: 'google.com', name: 'google'},
         {url: 'yahoo.com', name: 'yahoo'},
@@ -37,6 +40,7 @@ class App extends Component {
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this);
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this);
     this.toggleHackernews = this.toggleHackernews.bind(this);
+    this.toggleIntroMessage = this.toggleIntroMessage.bind(this);
   }
 
   componentDidMount(){
@@ -57,6 +61,12 @@ class App extends Component {
     LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
       if (localHackernewsVisible != null){
         self.setState({hackernewsVisible: localHackernewsVisible})
+      }
+    })
+    LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
+      if (localIntroMessageVisible != null){
+        self.setState({introMessageVisible: localIntroMessageVisible})
+        console.log(localIntroMessageVisible)
       }
     })
 
@@ -104,6 +114,11 @@ class App extends Component {
     this.setState({hackernewsVisible: !this.state.hackernewsVisible});
   }
 
+  toggleIntroMessage(){
+    this.setState({introMessageVisible: !this.state.introMessageVisible});
+    LocalForage.setItem('localIntroMessageVisible', false)
+  }
+
   render() {
 
     let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
@@ -122,9 +137,17 @@ class App extends Component {
     // add all individual component arrays to one big array
     // feed that array as props to Masonry UI component
 
+    let ShowIntroMessage = () => {
+      return (
+        this.state.introMessageVisible ?
+          <IntroMessage closeMessage={this.toggleIntroMessage}/> : null
+      )
+    }
+
     return (
       <Container>
-        <Header dividing size="huge" color="blue">Lounge</Header>
+        <PageHeader toggleHelp={this.toggleIntroMessage}/>
+        <ShowIntroMessage/>
         <Grid>
             <Menu
             handleRedditChange={this.handleRedditChange}

@@ -114,8 +114,7 @@ class YoutubeFeed extends React.Component {
   render() {
     return (
       <Grid.Column mobile={16} tablet={8} computer={8}>
-        { (this.state.fetching === true) && <this.showLoading/> }
-        { (this.state.fetching === false) && <this.showContent/> }
+        { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
       </Grid.Column>
     )
   }
