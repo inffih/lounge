@@ -15,7 +15,7 @@ class App extends Component {
   constructor(){
     super();
 
-    // LocalForage.clear()
+    LocalForage.clear()
 
     this.state = {
       redditValue: '',

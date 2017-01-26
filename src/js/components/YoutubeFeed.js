@@ -3,14 +3,15 @@ import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
 import { Card, Grid } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
-import * as config from '../../tempdata/api.config.json'
 import LocalForage from 'localforage'
+import config from '../../../api.config'
 
 class YoutubeFeed extends React.Component {
 
   // State includes youtubeData array for videos and fetching boolean
   constructor(){
     super()
+    console.log(config.GOOGLE_API_KEY)
     this.state = {
       youtubeData: [],
       fetching: false
@@ -42,7 +43,7 @@ class YoutubeFeed extends React.Component {
       params: {
         part: "contentDetails",
         forUsername: this.props.username,
-        key: config.key
+        key: config.GOOGLE_API_KEY
       }
     })
       .then(response => {
@@ -61,7 +62,7 @@ class YoutubeFeed extends React.Component {
         part: "snippet",
         maxResults: 4,
         playlistId: id,
-        key: config.key
+        key: config.GOOGLE_API_KEY
       }
     })
       .then(response => {
