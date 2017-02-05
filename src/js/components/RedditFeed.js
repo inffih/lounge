@@ -46,7 +46,7 @@ class RedditFeed extends React.Component {
 
   showLoading(){
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             r/{this.props.redditFeedName}
@@ -61,7 +61,7 @@ class RedditFeed extends React.Component {
 
   showContent(){
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             r/{this.props.redditFeedName}
@@ -78,9 +78,9 @@ class RedditFeed extends React.Component {
 
   render() {
     return (
-      <Grid.Column mobile={16} tablet={8} computer={8}>
+      <div>
         { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
-      </Grid.Column>
+      </div>
     )
   }
 }

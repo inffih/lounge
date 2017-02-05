@@ -5,7 +5,7 @@ import YoutubeFeed from './YoutubeFeed'
 import { Grid, Container, Header } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
-import Masonry from 'react-masonry-component'
+import MasonryList from './MasonryList.js'
 import Menu from './Menu'
 import IntroMessage from './IntroMessage'
 import PageHeader from './PageHeader'
@@ -15,14 +15,13 @@ class App extends Component {
   constructor(){
     super();
 
-    LocalForage.clear()
+    // LocalForage.clear()
 
     this.state = {
       redditValue: '',
       redditFeeds: [],
       youtubeValue: '',
       youtubeFeeds: [],
-      allFeedsArray: [],
       hackernewsVisible: false,
       introMessageVisible: true,
       customLinks:[
@@ -50,14 +49,14 @@ class App extends Component {
       if (localRedditFeeds != null){
         self.setState({redditFeeds: localRedditFeeds})
       }
-
     })
+
     LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
       if (localYoutubeFeeds != null){
         self.setState({youtubeFeeds: localYoutubeFeeds})
       }
-
     })
+
     LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
       if (localHackernewsVisible != null){
         self.setState({hackernewsVisible: localHackernewsVisible})
@@ -119,6 +118,10 @@ class App extends Component {
     LocalForage.setItem('localIntroMessageVisible', false)
   }
 
+  combineFeedsArrays(){
+
+  }
+
   render() {
 
     let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
@@ -165,10 +168,10 @@ class App extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            {redditFeedsArray}
             {youtubeFeedsArray}
           </Grid.Row>
         </Grid>
+        <MasonryList feeds={redditFeedsArray}/>
       </Container>
     );
   }

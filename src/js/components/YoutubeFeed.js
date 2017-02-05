@@ -78,7 +78,7 @@ class YoutubeFeed extends React.Component {
   // UI component for loading state
   showLoading(){
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             {this.props.username}
@@ -94,7 +94,7 @@ class YoutubeFeed extends React.Component {
   // UI component for videolist
   showContent() {
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             {this.props.username}
