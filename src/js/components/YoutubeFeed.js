@@ -1,7 +1,7 @@
 import React from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
-import { Card, Grid } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
 import LocalForage from 'localforage'
 
@@ -112,9 +112,9 @@ class YoutubeFeed extends React.Component {
   // Check if fetching or not, and show UI components accordingly
   render() {
     return (
-      <Grid.Column mobile={16} tablet={8} computer={8}>
+      <div>
         { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
-      </Grid.Column>
+      </div>
     )
   }
 

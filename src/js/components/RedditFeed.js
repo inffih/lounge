@@ -2,7 +2,7 @@ import React from 'react'
 import RedditFeedItem from './RedditFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card, Grid } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 
 class RedditFeed extends React.Component {

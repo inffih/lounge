@@ -2,7 +2,7 @@ import React from 'react'
 import HackernewsFeedItem from './HackernewsFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card, Grid } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 
 class Hackernews extends React.Component {
@@ -71,7 +71,7 @@ class Hackernews extends React.Component {
   // UI component for loading state
   showLoading(){
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             Hackernews
@@ -87,7 +87,7 @@ class Hackernews extends React.Component {
   // UI component for posts
   showContent(){
     return (
-      <Card fluid>
+      <Card>
         <Card.Content>
           <Card.Header>
             Hackernews
@@ -105,9 +105,9 @@ class Hackernews extends React.Component {
   // Check if fetching or not, and show UI components accordingly
   render() {
     return (
-      <Grid.Column mobile={16} tablet={8} computer={8}>
+      <div>
         { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
-      </Grid.Column>
+      </div>
     )
   }
 }

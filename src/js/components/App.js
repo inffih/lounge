@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Hackernews from './Hackernews'
+// import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
-import { Grid, Container, Header } from 'semantic-ui-react'
+import { Grid, Container } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
 import MasonryList from './MasonryList.js'
@@ -65,7 +65,6 @@ class App extends Component {
     LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
       if (localIntroMessageVisible != null){
         self.setState({introMessageVisible: localIntroMessageVisible})
-        console.log(localIntroMessageVisible)
       }
     })
 
@@ -119,26 +118,27 @@ class App extends Component {
   }
 
   combineFeedsArrays(){
+    let allFeedsArray = []
+
+    this.state.redditFeeds.map(redditFeedName => {
+      let redditFeedItem = <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+      allFeedsArray.push(redditFeedItem)
+      return redditFeedItem
+    })
+
+    this.state.youtubeFeeds.map(youtubeFeedName => {
+      let youtubeFeedItem = <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
+      allFeedsArray.push(youtubeFeedItem)
+      return youtubeFeedItem
+    })
+
+    return allFeedsArray
 
   }
 
   render() {
 
-    let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
-      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
-    })
-
-    let youtubeFeedsArray = this.state.youtubeFeeds.map(youtubeFeedName => {
-      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
-    })
-
-    // if (this.state.hackernewsVisible && <Hackernews />) {
-    //   this.setState(...this.state.allFeedsArray, <Hackernews /> )
-    // }
-
-
-    // add all individual component arrays to one big array
-    // feed that array as props to Masonry UI component
+    let allFeeds = this.combineFeedsArrays()
 
     let ShowIntroMessage = () => {
       return (
@@ -167,11 +167,8 @@ class App extends Component {
               <CustomLinks links={this.state.customLinks} />
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
-            {youtubeFeedsArray}
-          </Grid.Row>
         </Grid>
-        <MasonryList feeds={redditFeedsArray}/>
+        <MasonryList feeds={allFeeds}/>
       </Container>
     );
   }
