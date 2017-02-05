@@ -15,7 +15,7 @@ class App extends Component {
   constructor(){
     super();
 
-    // LocalForage.clear()
+    LocalForage.clear()
 
     this.state = {
       lfValue: 0,
@@ -88,6 +88,8 @@ class App extends Component {
     if(prevState.hackernewsVisible !== this.state.hackernewsVisible){
       LocalForage.setItem('localHackernewsVisible', this.state.hackernewsVisible)
     }
+
+
   }
 
 
@@ -103,6 +105,7 @@ class App extends Component {
       redditFeeds: redditArray,
       redditValue: ""
     });
+    this.combineFeedArrays()
   }
 
   handleYoutubeChange(event){
@@ -116,6 +119,7 @@ class App extends Component {
       youtubeFeeds: youtubeArray,
       youtubeValue: ""
     })
+    this.combineFeedArrays()
   }
 
   toggleHackernews(event){
@@ -132,16 +136,14 @@ class App extends Component {
   // Switch to flux or redux in the future for easier state management
 
   combineFeedArrays(){
-    if (this.state.lfValue === 4){
+    if (this.state.lfValue >= 4){
       let allFeeds = []
       this.state.redditFeeds.map(redditFeedName => {
-        console.log("called")
-        let redditFeedItem = <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
-        allFeeds = [...this.state.allFeedsArray, redditFeedItem]
+        allFeeds = [...this.state.allFeedsArray, <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>]
         this.setState({
           allFeedsArray: allFeeds
         })
-        return redditFeedItem
+        return allFeeds
       })
 
       this.state.youtubeFeeds.map(youtubeFeedName => {

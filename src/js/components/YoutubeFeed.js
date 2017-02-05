@@ -36,7 +36,6 @@ class YoutubeFeed extends React.Component {
   // Fetch channel details by username
   // Then pass along the "uploads"-playlist ID to fetchVideos
   fetchChannel(){
-    console.log(this.props.username,)
     this.setState({fetching: true})
     Axios.get('https://www.googleapis.com/youtube/v3/channels', {
       params: {
