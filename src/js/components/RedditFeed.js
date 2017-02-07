@@ -2,7 +2,7 @@ import React from 'react'
 import RedditFeedItem from './RedditFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card } from 'semantic-ui-react'
+import { Card, Grid } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 
 class RedditFeed extends React.Component {
@@ -18,17 +18,7 @@ class RedditFeed extends React.Component {
   }
 
   componentDidMount(){
-    let self = this
-    LocalForage.getItem('localRedditData').then(function(localRedditData){
-      if (localRedditData != null){
-        console.log("using localforage reddit")
-        self.setState({redditData: localRedditData})
-      }
-      else {
-        console.log("fetching reddit")
-        self.fetchFeed()
-      }
-    })
+    this.fetchFeed()
   }
 
   fetchFeed(){
@@ -46,7 +36,7 @@ class RedditFeed extends React.Component {
 
   showLoading(){
     return (
-      <Card>
+      <Card fluid>
         <Card.Content>
           <Card.Header>
             r/{this.props.redditFeedName}
@@ -61,7 +51,7 @@ class RedditFeed extends React.Component {
 
   showContent(){
     return (
-      <Card>
+      <Card fluid>
         <Card.Content>
           <Card.Header>
             r/{this.props.redditFeedName}
@@ -78,9 +68,9 @@ class RedditFeed extends React.Component {
 
   render() {
     return (
-      <div>
+      <Grid.Column mobile={16} tablet={8} computer={8}>
         { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
-      </div>
+      </Grid.Column>
     )
   }
 }

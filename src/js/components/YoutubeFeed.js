@@ -1,7 +1,7 @@
 import React from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
-import { Card } from 'semantic-ui-react'
+import { Card, Grid } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
 import LocalForage from 'localforage'
 
@@ -20,17 +20,7 @@ class YoutubeFeed extends React.Component {
 
   // Check if youtubeData exist locally, if not, fetch from api
   componentDidMount(){
-    let self = this
-    LocalForage.getItem('localYoutubeData').then(function(localYoutubeData){
-      if (localYoutubeData != null){
-        console.log("using localforage youtube")
-        self.setState({youtubeData: localYoutubeData})
-      }
-      else {
-        console.log("fetching youtube")
-        self.fetchChannel()
-      }
-    })
+    this.fetchChannel()
   }
 
   // Fetch channel details by username
@@ -68,7 +58,6 @@ class YoutubeFeed extends React.Component {
           youtubeData: response.data.items,
           fetching: false
         })
-        LocalForage.setItem('localYoutubeData', this.state.youtubeData)
       })
       .catch(function (error) {
         console.log(error);
@@ -78,7 +67,7 @@ class YoutubeFeed extends React.Component {
   // UI component for loading state
   showLoading(){
     return (
-      <Card>
+      <Card fluid>
         <Card.Content>
           <Card.Header>
             {this.props.username}
@@ -94,7 +83,7 @@ class YoutubeFeed extends React.Component {
   // UI component for videolist
   showContent() {
     return (
-      <Card>
+      <Card fluid>
         <Card.Content>
           <Card.Header>
             {this.props.username}
@@ -112,9 +101,9 @@ class YoutubeFeed extends React.Component {
   // Check if fetching or not, and show UI components accordingly
   render() {
     return (
-      <div>
+      <Grid.Column mobile={16} tablet={8} computer={8}>
         { this.state.fetching ? <this.showLoading/> : <this.showContent/> }
-      </div>
+      </Grid.Column>
     )
   }
 

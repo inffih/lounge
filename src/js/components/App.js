@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-// import Hackernews from './Hackernews'
+import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
-import { Grid, Container } from 'semantic-ui-react'
+import { Grid, Container, Header } from 'semantic-ui-react'
 import LocalForage from 'localforage'
 import CustomLinks from './CustomLinks'
-import MasonryList from './MasonryList.js'
+import Masonry from 'react-masonry-component'
 import Menu from './Menu'
 import IntroMessage from './IntroMessage'
 import PageHeader from './PageHeader'
@@ -15,10 +15,9 @@ class App extends Component {
   constructor(){
     super();
 
-    LocalForage.clear()
+    // LocalForage.clear()
 
     this.state = {
-      lfValue: 0,
       redditValue: '',
       redditFeeds: [],
       youtubeValue: '',
@@ -29,45 +28,12 @@ class App extends Component {
       customLinks:[
         {url: 'google.com', name: 'google'},
         {url: 'yahoo.com', name: 'yahoo'},
+        {url: 'customlink.com', name: 'customlink'},
+        {url: 'anothercustomlink.com', name: 'anothercustomlink'},
+        {url: 'baidu.com', name: 'baidu'},
+        {url: 'bing.com', name: 'bing'}
       ]
     }
-
-    // Adding up lfValue per LocalForage call.
-    // This is a horrible hack to fake async call for combineFeedsArrays
-    // Switch to flux or redux in the future for easier state management
-
-    self = this
-    LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
-      self.state.lfValue++
-      if (localRedditFeeds != null){
-        self.state.redditFeeds = localRedditFeeds
-      }
-      self.combineFeedArrays()
-    })
-
-    LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-      self.state.lfValue++
-      if (localYoutubeFeeds != null){
-        self.state.youtubeFeeds = localYoutubeFeeds
-      }
-      self.combineFeedArrays()
-    })
-
-    LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
-      self.state.lfValue++
-      if (localHackernewsVisible != null){
-        self.state.hackernewsVisible = localHackernewsVisible
-      }
-      self.combineFeedArrays()
-    })
-
-    LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
-      self.state.lfValue++
-      if (localIntroMessageVisible != null){
-        self.state.introMessageVisible = localIntroMessageVisible
-      }
-      self.combineFeedArrays()
-    })
 
     this.handleRedditChange = this.handleRedditChange.bind(this);
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this);
@@ -75,6 +41,34 @@ class App extends Component {
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this);
     this.toggleHackernews = this.toggleHackernews.bind(this);
     this.toggleIntroMessage = this.toggleIntroMessage.bind(this);
+  }
+
+  componentDidMount(){
+    let self = this
+
+    LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
+      if (localRedditFeeds != null){
+        self.setState({redditFeeds: localRedditFeeds})
+      }
+
+    })
+    LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
+      if (localYoutubeFeeds != null){
+        self.setState({youtubeFeeds: localYoutubeFeeds})
+      }
+
+    })
+    LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
+      if (localHackernewsVisible != null){
+        self.setState({hackernewsVisible: localHackernewsVisible})
+      }
+    })
+    LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
+      if (localIntroMessageVisible != null){
+        self.setState({introMessageVisible: localIntroMessageVisible})
+        console.log(localIntroMessageVisible)
+      }
+    })
 
   }
 
@@ -88,11 +82,7 @@ class App extends Component {
     if(prevState.hackernewsVisible !== this.state.hackernewsVisible){
       LocalForage.setItem('localHackernewsVisible', this.state.hackernewsVisible)
     }
-
-
   }
-
-
 
   handleRedditChange(event){
     this.setState({redditValue: event.target.value});
@@ -105,7 +95,6 @@ class App extends Component {
       redditFeeds: redditArray,
       redditValue: ""
     });
-    this.combineFeedArrays()
   }
 
   handleYoutubeChange(event){
@@ -119,7 +108,6 @@ class App extends Component {
       youtubeFeeds: youtubeArray,
       youtubeValue: ""
     })
-    this.combineFeedArrays()
   }
 
   toggleHackernews(event){
@@ -131,33 +119,23 @@ class App extends Component {
     LocalForage.setItem('localIntroMessageVisible', false)
   }
 
-  // Checking lfValue from constructor's LocalForage methods
-  // This is a horrible hack to fake async call for combineFeedsArrays
-  // Switch to flux or redux in the future for easier state management
-
-  combineFeedArrays(){
-    if (this.state.lfValue >= 4){
-      let allFeeds = []
-      this.state.redditFeeds.map(redditFeedName => {
-        allFeeds = [...this.state.allFeedsArray, <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>]
-        this.setState({
-          allFeedsArray: allFeeds
-        })
-        return allFeeds
-      })
-
-      this.state.youtubeFeeds.map(youtubeFeedName => {
-        let youtubeFeedItem = <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
-        allFeeds = [...this.state.allFeedsArray, youtubeFeedItem]
-        this.setState({
-          allFeedsArray: allFeeds
-        })
-        return youtubeFeedItem
-      })
-    }
-  }
-
   render() {
+
+    let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
+      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+    })
+
+    let youtubeFeedsArray = this.state.youtubeFeeds.map(youtubeFeedName => {
+      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
+    })
+
+    // if (this.state.hackernewsVisible && <Hackernews />) {
+    //   this.setState(...this.state.allFeedsArray, <Hackernews /> )
+    // }
+
+
+    // add all individual component arrays to one big array
+    // feed that array as props to Masonry UI component
 
     let ShowIntroMessage = () => {
       return (
@@ -186,8 +164,12 @@ class App extends Component {
               <CustomLinks links={this.state.customLinks} />
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row>
+            { this.state.hackernewsVisible ? <Hackernews/> : null }
+            {redditFeedsArray}
+            {youtubeFeedsArray}
+          </Grid.Row>
         </Grid>
-        <MasonryList feeds={this.state.allFeedsArray}/>
       </Container>
     );
   }
