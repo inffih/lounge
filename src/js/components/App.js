@@ -9,30 +9,17 @@ import Masonry from 'react-masonry-component'
 import Menu from './Menu'
 import IntroMessage from './IntroMessage'
 import PageHeader from './PageHeader'
+import { observer } from 'mobx-react'
 
+@observer
 class App extends Component {
 
   constructor(){
     super();
-
-    // LocalForage.clear()
+    LocalForage.clear()
 
     this.state = {
-      redditValue: '',
-      redditFeeds: [],
-      youtubeValue: '',
-      youtubeFeeds: [],
       allFeedsArray: [],
-      hackernewsVisible: false,
-      introMessageVisible: true,
-      customLinks:[
-        {url: 'google.com', name: 'google'},
-        {url: 'yahoo.com', name: 'yahoo'},
-        {url: 'customlink.com', name: 'customlink'},
-        {url: 'anothercustomlink.com', name: 'anothercustomlink'},
-        {url: 'baidu.com', name: 'baidu'},
-        {url: 'bing.com', name: 'bing'}
-      ]
     }
 
     this.handleRedditChange = this.handleRedditChange.bind(this);
@@ -48,84 +35,72 @@ class App extends Component {
 
     LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
       if (localRedditFeeds != null){
-        self.setState({redditFeeds: localRedditFeeds})
+        self.props.redditStore.redditFeeds = localRedditFeeds
       }
 
     })
     LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
       if (localYoutubeFeeds != null){
-        self.setState({youtubeFeeds: localYoutubeFeeds})
+        self.props.redditStore.youtubeFeeds = localYoutubeFeeds
       }
 
     })
     LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
       if (localHackernewsVisible != null){
-        self.setState({hackernewsVisible: localHackernewsVisible})
+        this.props.uiStore.hackernewsVisible = localHackernewsVisible
       }
     })
     LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
       if (localIntroMessageVisible != null){
-        self.setState({introMessageVisible: localIntroMessageVisible})
-        console.log(localIntroMessageVisible)
+        this.props.uiStore.introMessageVisible = localIntroMessageVisible
       }
     })
 
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if(prevState.redditFeeds !== this.state.redditFeeds){
-      LocalForage.setItem('localRedditFeeds', this.state.redditFeeds)
-    }
-    if(prevState.youtubeFeeds !== this.state.youtubeFeeds){
-      LocalForage.setItem('localYoutubeFeeds', this.state.youtubeFeeds)
-    }
-    if(prevState.hackernewsVisible !== this.state.hackernewsVisible){
-      LocalForage.setItem('localHackernewsVisible', this.state.hackernewsVisible)
-    }
-  }
-
   handleRedditChange(event){
-    this.setState({redditValue: event.target.value});
+    this.props.redditStore.redditValue = event.target.value
   }
 
   handleRedditSubmit(event){
-    event.preventDefault();
-    let redditArray = [...this.state.redditFeeds, this.state.redditValue]
-    this.setState({
-      redditFeeds: redditArray,
-      redditValue: ""
-    });
+    event.preventDefault()
+    let redditArray = [...this.props.redditStore.redditFeeds, this.props.redditStore.redditValue]
+    this.props.redditStore.redditFeeds = redditArray
+    this.props.redditStore.redditValue = ""
+    LocalForage.setItem('localRedditFeeds', this.props.redditStore.redditFeeds).bind(this)
+
   }
 
   handleYoutubeChange(event){
-    this.setState({youtubeValue: event.target.value});
+    this.props.youtubeStore.youtubeValue = event.target.value
   }
 
   handleYoutubeSubmit(event){
     event.preventDefault();
-    let youtubeArray = [...this.state.youtubeFeeds, this.state.youtubeValue]
-    this.setState({
-      youtubeFeeds: youtubeArray,
-      youtubeValue: ""
-    })
+    let youtubeArray = [...this.props.youtubeStore.youtubeFeeds, this.props.youtubeStore.youtubeValue]
+    this.props.youtubeStore.youtubeFeeds = youtubeArray
+    this.props.youtubeStore.youtubeValue = ""
   }
 
   toggleHackernews(event){
-    this.setState({hackernewsVisible: !this.state.hackernewsVisible});
+    this.props.uiStore.hackernewsVisible = !this.props.uiStore.hackernewsVisible
+    LocalForage.setItem('localHackernewsVisible', this.props.uiStore.hackernewsVisible)
   }
 
   toggleIntroMessage(){
-    this.setState({introMessageVisible: !this.state.introMessageVisible});
+    console.log("toggling")
+    console.log(this.props.uiStore.introMessageVisible)
+    this.props.uiStore.introMessageVisible = !this.props.uiStore.introMessageVisible
     LocalForage.setItem('localIntroMessageVisible', false)
   }
 
   render() {
 
-    let redditFeedsArray = this.state.redditFeeds.map(redditFeedName => {
+    let redditFeedsArray = this.props.redditStore.redditFeeds.map(redditFeedName => {
       return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
     })
 
-    let youtubeFeedsArray = this.state.youtubeFeeds.map(youtubeFeedName => {
+    let youtubeFeedsArray = this.props.youtubeStore.youtubeFeeds.map(youtubeFeedName => {
       return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
     })
 
@@ -137,22 +112,16 @@ class App extends Component {
     // add all individual component arrays to one big array
     // feed that array as props to Masonry UI component
 
-    let ShowIntroMessage = () => {
-      return (
-        this.state.introMessageVisible ?
-          <IntroMessage closeMessage={this.toggleIntroMessage}/> : null
-      )
-    }
 
     return (
       <Container>
         <PageHeader toggleHelp={this.toggleIntroMessage}/>
-        <ShowIntroMessage/>
+        { this.props.uiStore.introMessageVisible ? <IntroMessage closeMessage={this.toggleIntroMessage}/> : null }
         <Grid>
             <Menu
             handleRedditChange={this.handleRedditChange}
             handleRedditSubmit={this.handleRedditSubmit}
-            redditValue={this.state.redditValue}
+            redditValue={this.props.redditStore.redditValue}
             handleYoutubeChange={this.handleYoutubeChange}
             handleYoutubeSubmit={this.handleYoutubeSubmit}
             youtubeValue={this.state.youtubeValue}
@@ -161,11 +130,11 @@ class App extends Component {
             />
           <Grid.Row>
             <Grid.Column mobile={16} tablet={16} computer={16}>
-              <CustomLinks links={this.state.customLinks} />
+              <CustomLinks links={this.props.linkStore.links} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            { this.state.hackernewsVisible ? <Hackernews/> : null }
+            { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
             {redditFeedsArray}
             {youtubeFeedsArray}
           </Grid.Row>
