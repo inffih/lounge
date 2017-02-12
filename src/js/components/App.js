@@ -19,34 +19,6 @@ class App extends Component {
     LocalForage.clear()
   }
 
-  componentDidMount(){
-    let self = this
-
-    LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
-      if (localRedditFeeds != null){
-        self.props.redditStore.redditFeeds = localRedditFeeds
-      }
-
-    })
-    LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-      if (localYoutubeFeeds != null){
-        self.props.redditStore.youtubeFeeds = localYoutubeFeeds
-      }
-
-    })
-    LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
-      if (localHackernewsVisible != null){
-        this.props.uiStore.hackernewsVisible = localHackernewsVisible
-      }
-    })
-    LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
-      if (localIntroMessageVisible != null){
-        this.props.uiStore.introMessageVisible = localIntroMessageVisible
-      }
-    })
-
-  }
-
   render() {
 
     let redditFeedsArray = this.props.redditStore.redditFeeds.map(redditFeedName => {

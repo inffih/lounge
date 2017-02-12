@@ -6,8 +6,22 @@ class UiStore {
   @observable introMessageVisible = true
 
   constructor(){
+    let self = this
+    LocalForage.getItem('localHackernewsVisible').then(function(localHackernewsVisible){
+      if (localHackernewsVisible != null){
+        self.hackernewsVisible = localHackernewsVisible
+      }
+    })
+
+    LocalForage.getItem('localIntroMessageVisible').then(function(localIntroMessageVisible){
+      if (localIntroMessageVisible != null){
+        self.introMessageVisible = localIntroMessageVisible
+      }
+    })
+
     this.toggleHackernews = this.toggleHackernews.bind(this)
     this.toggleIntroMessage = this.toggleIntroMessage.bind(this)
+
   }
 
   toggleHackernews(event){
