@@ -12,7 +12,6 @@ class YoutubeStore {
   }
 
   handleLocalStorage(){
-    console.log(this.youtubeValue)
     LocalForage.setItem('localYoutubeFeeds', [...this.youtubeFeeds])
 
     // Enable this to check curren localforage

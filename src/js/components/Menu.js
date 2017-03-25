@@ -11,7 +11,11 @@ const Menu = ({
   handleYoutubeSubmit,
   youtubeValue,
   toggleHackernews,
-  hackernewsVisible
+  hackernewsVisible,
+  handleYoutubeErrorDismiss,
+  youtubeInputErrorMsgVisible,
+  handleRedditErrorDismiss,
+  redditInputErrorMsgVisible
 
   }) => (
     <Grid.Row>
@@ -23,6 +27,8 @@ const Menu = ({
           value={redditValue}
           labelText='Add subreddit'
           defaultText='e.g. "All"'
+          handleErrorDismiss={handleRedditErrorDismiss}
+          inputErrorMsgVisible={redditInputErrorMsgVisible}
         />
       </Grid.Column>
       <Grid.Column mobile={16} tablet={8} computer={4}>
@@ -33,6 +39,8 @@ const Menu = ({
           value={youtubeValue}
           labelText='Add YouTube channel'
           defaultText='e.g. "Google"'
+          handleErrorDismiss={handleYoutubeErrorDismiss}
+          inputErrorMsgVisible={youtubeInputErrorMsgVisible}
         />
       </Grid.Column>
       <Grid.Column mobile={16} tablet={8} computer={4}>

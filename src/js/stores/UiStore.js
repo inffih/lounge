@@ -4,6 +4,8 @@ import LocalForage from 'localforage'
 class UiStore {
   @observable hackernewsVisible = false
   @observable introMessageVisible = true
+  @observable youtubeInputErrorMsgVisible = false
+  @observable redditInputErrorMsgVisible = false
 
   constructor(){
     let self = this
@@ -20,8 +22,18 @@ class UiStore {
     })
 
     this.toggleHackernews = this.toggleHackernews.bind(this)
+    this.handleYoutubeErrorDismiss = this.handleYoutubeErrorDismiss.bind(this)
+    this.handleRedditErrorDismiss = this.handleRedditErrorDismiss.bind(this)
     this.toggleIntroMessage = this.toggleIntroMessage.bind(this)
 
+  }
+
+  handleYoutubeErrorDismiss(){
+    this.youtubeInputErrorMsgVisible = !this.youtubeInputErrorMsgVisible
+  }
+
+  handleRedditErrorDismiss(){
+    this.redditInputErrorMsgVisible = !this.redditInputErrorMsgVisible
   }
 
   toggleHackernews(event){

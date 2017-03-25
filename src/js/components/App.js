@@ -30,13 +30,12 @@ class App extends Component {
       return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
     })
 
-
     return (
       <Container>
         <PageHeader toggleHelp={this.props.uiStore.toggleIntroMessage}/>
         { this.props.uiStore.introMessageVisible ? <IntroMessage closeMessage={this.props.uiStore.toggleIntroMessage}/> : null }
         <Grid>
-            <Menu
+          <Menu
             handleRedditChange={this.props.redditStore.handleRedditChange}
             handleRedditSubmit={this.props.redditStore.handleRedditSubmit}
             redditValue={this.props.redditStore.redditValue}
@@ -45,13 +44,18 @@ class App extends Component {
             youtubeValue={this.props.youtubeStore.youtubeValue}
             toggleHackernews={this.props.uiStore.toggleHackernews}
             hackernewsVisible={this.props.uiStore.hackernewsVisible}
-            />
+            handleYoutubeErrorDismiss={this.props.uiStore.handleYoutubeErrorDismiss}
+            youtubeInputErrorMsgVisible={this.props.uiStore.youtubeInputErrorMsgVisible}
+            handleRedditErrorDismiss={this.props.uiStore.handleRedditErrorDismiss}
+            redditInputErrorMsgVisible={this.props.uiStore.redditInputErrorMsgVisible}
+          />
           <Grid.Row>
             <Grid.Column mobile={16} tablet={16} computer={16}>
               <CustomLinks links={this.props.linkStore.links} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
+            { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
             { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
             {redditFeedsArray}
             {youtubeFeedsArray}
