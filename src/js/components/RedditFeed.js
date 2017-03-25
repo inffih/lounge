@@ -3,7 +3,6 @@ import RedditFeedItem from './RedditFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
 import { Card, Grid } from 'semantic-ui-react'
-import LocalForage from 'localforage'
 
 class RedditFeed extends React.Component {
 
@@ -30,7 +29,6 @@ class RedditFeed extends React.Component {
           redditData: response.data.data.children,
           fetching: false
         })
-        LocalForage.setItem('localRedditData', this.state.redditData)
       })
   }
 

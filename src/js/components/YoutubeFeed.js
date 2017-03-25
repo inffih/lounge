@@ -3,7 +3,6 @@ import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
 import { Card, Grid } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
-import LocalForage from 'localforage'
 
 class YoutubeFeed extends React.Component {
 
@@ -12,7 +11,8 @@ class YoutubeFeed extends React.Component {
     super()
     this.state = {
       youtubeData: [],
-      fetching: false
+      fetching: false,
+      youtubeFeedsArray: []
     }
     this.showLoading = this.showLoading.bind(this);
     this.showContent = this.showContent.bind(this);

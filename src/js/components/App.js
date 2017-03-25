@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import Hackernews from './Hackernews'
 import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
-import { Grid, Container, Header } from 'semantic-ui-react'
-import LocalForage from 'localforage'
+import { Grid, Container } from 'semantic-ui-react'
 import CustomLinks from './CustomLinks'
-import Masonry from 'react-masonry-component'
+// import Masonry from 'react-masonry-component'
 import Menu from './Menu'
 import IntroMessage from './IntroMessage'
 import PageHeader from './PageHeader'
@@ -16,7 +15,9 @@ class App extends Component {
 
   constructor(){
     super();
-    LocalForage.clear()
+    this.state = {
+      youtubeFeedsArray: []
+    }
   }
 
   render() {
