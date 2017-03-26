@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
-import { Card, Grid, Message, Button, Icon } from 'semantic-ui-react'
+import { Card, Grid, Button, Icon } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
 import Axios from 'axios'
 
@@ -12,7 +12,7 @@ class YoutubeFeed extends Component {
     this.state = {
       fetching: false,
       youtubeData: [],
-      youtubeFeedsArray: []
+      title: ""
     }
 
     this.handleRemoveFeed = this.handleRemoveFeed.bind(this)
@@ -60,7 +60,8 @@ class YoutubeFeed extends Component {
       .then(response => {
         this.setState({
           youtubeData: response.data.items,
-          fetching: false
+          fetching: false,
+          title: response.data.items[0].snippet.channelTitle
         })
       })
       .catch(function (error) {
@@ -77,11 +78,6 @@ class YoutubeFeed extends Component {
     return (
       <Card fluid>
         <Card.Content>
-          <Card.Header>
-            username here
-          </Card.Header>
-        </Card.Content>
-        <Card.Content>
           <LoaderComponent/>
         </Card.Content>
       </Card>
@@ -94,7 +90,7 @@ class YoutubeFeed extends Component {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            username here
+          {this.state.title}
               <Button
                 floated="right"
                 compact
