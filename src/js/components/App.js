@@ -27,7 +27,7 @@ class App extends Component {
     })
 
     let youtubeFeedsArray = this.props.youtubeStore.youtubeFeeds.map(youtubeFeedName => {
-      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName}/>
+      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName} removeFeed={this.props.youtubeStore.removeFeed}/>
     })
 
     return (

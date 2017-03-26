@@ -1,7 +1,7 @@
 import React from 'react'
 import { Feed, Embed } from 'semantic-ui-react'
 
-const RedditFeedItem = ({item}) => (
+const YoutubeFeedItem = ({item}) => (
 
   <Feed>
     <Feed.Event>
@@ -24,4 +24,4 @@ const RedditFeedItem = ({item}) => (
   </Feed>
 )
 
-export default RedditFeedItem
+export default YoutubeFeedItem

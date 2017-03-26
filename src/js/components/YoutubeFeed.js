@@ -1,7 +1,7 @@
 import React from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import Axios from 'axios'
-import { Card, Grid, Message } from 'semantic-ui-react'
+import { Card, Grid, Message, Button, Icon } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
 
 class YoutubeFeed extends React.Component {
@@ -16,6 +16,7 @@ class YoutubeFeed extends React.Component {
     }
     this.showLoading = this.showLoading.bind(this);
     this.showContent = this.showContent.bind(this);
+    this.handleRemoveFeed = this.handleRemoveFeed.bind(this);
   }
 
   // Check if youtubeData exist locally, if not, fetch from api
@@ -64,6 +65,10 @@ class YoutubeFeed extends React.Component {
       });
   }
 
+  handleRemoveFeed(){
+    this.props.removeFeed(this.props.username)
+  }
+
   // UI component for loading state
   showLoading(){
     return (
@@ -87,6 +92,15 @@ class YoutubeFeed extends React.Component {
         <Card.Content>
           <Card.Header>
             {this.props.username}
+              <Button
+                floated="right"
+                compact
+                icon
+                circular
+                onClick={this.handleRemoveFeed}
+              >
+                <Icon name='close' />
+              </Button>
           </Card.Header>
         </Card.Content>
         <Card.Content>

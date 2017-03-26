@@ -8,29 +8,40 @@ class YoutubeStore {
   constructor(){
 
   // Uncomment this to clear localforage
-  // LocalForage.clear()
+    // LocalForage.clear()
 
-  var self = this
-  LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-    if (localYoutubeFeeds !== null){
-      self.youtubeFeeds = localYoutubeFeeds
-    }
-    console.log("youtubefeeds on localforage are", localYoutubeFeeds)
-  })
+    this.initializeYoutubeFeeds()
 
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this)
+    this.removeFeed = this.removeFeed.bind(this)
   }
 
+  initializeYoutubeFeeds(){
+    var self = this
+    LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
+      if (localYoutubeFeeds !== null){
+        self.youtubeFeeds = localYoutubeFeeds
+      }
+    })
+  }
+
+  // Add new feed to localforage
   handleLocalStorage(){
     LocalForage.setItem('localYoutubeFeeds', [...this.youtubeFeeds])
+  }
 
-    // Enable this to check curren localforage
-    // .then(function(){
-    //   LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-    //       console.log("changed localforage to", localYoutubeFeeds)
-    //   })
-    // })
+  // Loop trought feeds array and if string matching
+  // the given parameter is fround, delete it
+  removeFeed(feed){
+    console.log("removing ", feed)
+    // Remove from store
+    for (var i = 0; i < this.youtubeFeeds.length; i++) {
+      if (this.youtubeFeeds[i] === feed ) {
+        this.youtubeFeeds.splice(i, 1)
+        this.handleLocalStorage()
+      }
+    }
 
   }
 
