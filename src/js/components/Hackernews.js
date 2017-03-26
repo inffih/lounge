@@ -19,20 +19,27 @@ class Hackernews extends React.Component {
     this.showContent = this.showContent.bind(this);
   }
 
-  // Check if news array exist locally, if not, fetch from api
+
   componentDidMount(){
 
-    let self = this
-    LocalForage.getItem('localHackernews').then(function(localHackernews){
-      if (localHackernews != null){
-        console.log("using localforage HN")
-        self.setState({news: localHackernews})
-      }
-      else {
-        console.log("fetching HN")
-        self.fetchNews()
-      }
-    })
+    console.log("fetching HN")
+    this.fetchNews()
+
+    // Check if news array exist locally, if not, fetch from api
+    // Disabled for now. Need to implement a refresh button before
+    // enbling loading hackernews from localforage
+
+    // let self = this
+    // LocalForage.getItem('localHackernews').then(function(localHackernews){
+    //   if (localHackernews != null){
+    //     console.log("using localforage HN")
+    //     self.setState({news: localHackernews})
+    //   }
+    //   else {
+    //     console.log("fetching HN")
+    //     self.fetchNews()
+    //   }
+    // })
   }
 
   // Fetch news IDs and pass them to loopNews

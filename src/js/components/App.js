@@ -56,7 +56,6 @@ class App extends Component {
           </Grid.Row>
           <Grid.Row>
             { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
-            { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
             {redditFeedsArray}
             {youtubeFeedsArray}
           </Grid.Row>

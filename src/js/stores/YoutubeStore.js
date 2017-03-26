@@ -6,13 +6,16 @@ class YoutubeStore {
   @observable youtubeFeeds = []
 
   constructor(){
+
+  // Uncomment this to clear localforage
   // LocalForage.clear()
+
   var self = this
   LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
     if (localYoutubeFeeds !== null){
       self.youtubeFeeds = localYoutubeFeeds
     }
-    console.log("localforage is", localYoutubeFeeds)
+    console.log("youtubefeeds on localforage are", localYoutubeFeeds)
   })
 
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
