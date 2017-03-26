@@ -26,8 +26,8 @@ class App extends Component {
       return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
     })
 
-    let youtubeFeedsArray = this.props.youtubeStore.youtubeFeeds.map(youtubeFeedName => {
-      return <YoutubeFeed key={youtubeFeedName} username={youtubeFeedName} removeFeed={this.props.youtubeStore.removeFeed}/>
+    let youtubeDataArray = this.props.youtubeStore.youtubeFeeds.map(id => {
+      return <YoutubeFeed key={id} id={id} removeFeed={this.props.youtubeStore.removeFeed} />
     })
 
     return (
@@ -36,18 +36,10 @@ class App extends Component {
         { this.props.uiStore.introMessageVisible ? <IntroMessage closeMessage={this.props.uiStore.toggleIntroMessage}/> : null }
         <Grid>
           <Menu
-            handleRedditChange={this.props.redditStore.handleRedditChange}
-            handleRedditSubmit={this.props.redditStore.handleRedditSubmit}
-            redditValue={this.props.redditStore.redditValue}
-            handleYoutubeChange={this.props.youtubeStore.handleYoutubeChange}
-            handleYoutubeSubmit={this.props.youtubeStore.handleYoutubeSubmit}
-            youtubeValue={this.props.youtubeStore.youtubeValue}
-            toggleHackernews={this.props.uiStore.toggleHackernews}
-            hackernewsVisible={this.props.uiStore.hackernewsVisible}
-            handleYoutubeErrorDismiss={this.props.uiStore.handleYoutubeErrorDismiss}
-            youtubeInputErrorMsgVisible={this.props.uiStore.youtubeInputErrorMsgVisible}
-            handleRedditErrorDismiss={this.props.uiStore.handleRedditErrorDismiss}
-            redditInputErrorMsgVisible={this.props.uiStore.redditInputErrorMsgVisible}
+            uiStore={this.props.uiStore}
+            redditStore={this.props.redditStore}
+            youtubeStore={this.props.youtubeStore}
+            linkStore={this.props.linkStore}
           />
           <Grid.Row>
             <Grid.Column mobile={16} tablet={16} computer={16}>
@@ -56,8 +48,7 @@ class App extends Component {
           </Grid.Row>
           <Grid.Row>
             { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
-            {redditFeedsArray}
-            {youtubeFeedsArray}
+            {youtubeDataArray}
           </Grid.Row>
         </Grid>
       </Container>

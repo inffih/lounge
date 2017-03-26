@@ -1,37 +1,40 @@
-import React from 'react'
+import React, { Component } from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
-import Axios from 'axios'
 import { Card, Grid, Message, Button, Icon } from 'semantic-ui-react'
 import LoaderComponent from './LoaderComponent'
+import Axios from 'axios'
 
-class YoutubeFeed extends React.Component {
+class YoutubeFeed extends Component {
 
   // State includes youtubeData array for videos and fetching boolean
   constructor(){
     super()
     this.state = {
-      youtubeData: [],
       fetching: false,
+      youtubeData: [],
       youtubeFeedsArray: []
     }
-    this.showLoading = this.showLoading.bind(this);
-    this.showContent = this.showContent.bind(this);
-    this.handleRemoveFeed = this.handleRemoveFeed.bind(this);
+
+    this.handleRemoveFeed = this.handleRemoveFeed.bind(this)
+    this.fetchChannel = this.fetchChannel.bind(this)
+    this.fetchVideos = this.fetchVideos.bind(this)
+    this.showContent = this.showContent.bind(this)
+    this.showLoading = this.showLoading.bind(this)
   }
 
-  // Check if youtubeData exist locally, if not, fetch from api
   componentDidMount(){
     this.fetchChannel()
   }
 
-  // Fetch channel details by username
+  // Fetch channel details by userId
   // Then pass along the "uploads"-playlist ID to fetchVideos
   fetchChannel(){
+
     this.setState({fetching: true})
     Axios.get('https://www.googleapis.com/youtube/v3/channels', {
       params: {
         part: "contentDetails",
-        forUsername: this.props.username,
+        id: this.props.id,
         key: process.env.REACT_APP_GOOGLE_KEY
       }
     })
@@ -66,7 +69,7 @@ class YoutubeFeed extends React.Component {
   }
 
   handleRemoveFeed(){
-    this.props.removeFeed(this.props.username)
+    this.props.removeFeed(this.props.id)
   }
 
   // UI component for loading state
@@ -75,7 +78,7 @@ class YoutubeFeed extends React.Component {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            {this.props.username}
+            username here
           </Card.Header>
         </Card.Content>
         <Card.Content>
@@ -91,7 +94,7 @@ class YoutubeFeed extends React.Component {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            {this.props.username}
+            username here
               <Button
                 floated="right"
                 compact

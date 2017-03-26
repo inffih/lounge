@@ -20,7 +20,7 @@ const AddFeedField = ({
       icon={{
         onClick: handleSubmit,
         label: name,
-        name: 'plus',
+        name: 'search',
         circular: true,
         link: true
       }}
