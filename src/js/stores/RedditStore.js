@@ -1,6 +1,7 @@
 import { observable } from 'mobx'
 import LocalForage from 'localforage'
 import Axios from 'axios'
+import debounce from 'debounce'
 
 class RedditStore {
   @observable redditValue = ''
@@ -17,7 +18,7 @@ class RedditStore {
     this.initializeRedditFeeds()
 
     this.handleRedditChange = this.handleRedditChange.bind(this)
-    this.searchForSubreddit = this.searchForSubreddit.bind(this)
+    this.searchForSubreddit = debounce(this.searchForSubreddit.bind(this), 350)
     this.handleRedditSearchChange = this.handleRedditSearchChange.bind(this)
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this)
     this.removeFeed = this.removeFeed.bind(this)
@@ -59,7 +60,7 @@ class RedditStore {
     if( !this.redditFeeds.includes(data.title) ){
       this.redditFeeds.push(data.title)
       this.handleLocalStorage()
-      this.redditSearchTerm = ""
+      this.redditSearchterm = ""
     }
   }
 

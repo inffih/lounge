@@ -24,7 +24,7 @@ class Menu extends Component {
           <Search
             onResultSelect={this.props.redditStore.handleRedditSubmit}
             onSearchChange={this.props.redditStore.handleRedditSearchChange}
-            value={this.props.redditStore.redditSearchTerm}
+            value={this.props.redditStore.redditSearchterm}
             results={this.props.redditStore.redditSubreddits}
             loading={this.props.redditStore.searchLoading}
           />

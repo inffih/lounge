@@ -1,6 +1,7 @@
 import { observable } from 'mobx'
 import LocalForage from 'localforage'
 import Axios from 'axios'
+import debounce from 'debounce'
 
 class YoutubeStore {
   @observable youtubeValue = ''
@@ -19,8 +20,8 @@ class YoutubeStore {
     this.initializeYoutubeFeeds()
 
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
-    this.searchForChannel = this.searchForChannel.bind(this)
-    this.handleYoutubeSearchChange = this.handleYoutubeSearchChange.bind(this)
+    this.searchForChannel =  debounce(this.searchForChannel.bind(this), 350)
+    this.handleYoutubeSearchChange =this.handleYoutubeSearchChange.bind(this)
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this)
     this.removeFeed = this.removeFeed.bind(this)
   }
@@ -79,6 +80,7 @@ class YoutubeStore {
 
   // TODO: Implement delay and check for too many consecutive request
   searchForChannel(){
+    console.log("searching for", this.youtubeSearchTerm)
     this.searchLoading = true
     Axios.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
