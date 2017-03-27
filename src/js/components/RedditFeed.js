@@ -2,7 +2,7 @@ import React from 'react'
 import RedditFeedItem from './RedditFeedItem'
 import Axios from 'axios'
 import LoaderComponent from './LoaderComponent'
-import { Card, Grid } from 'semantic-ui-react'
+import { Card, Grid, Button, Icon } from 'semantic-ui-react'
 
 class RedditFeed extends React.Component {
 
@@ -12,17 +12,23 @@ class RedditFeed extends React.Component {
       redditData: [],
       fetching: false
     }
+
     this.showLoading = this.showLoading.bind(this);
     this.showContent = this.showContent.bind(this);
+    this.handleRemoveFeed = this.handleRemoveFeed.bind(this)
   }
 
   componentDidMount(){
     this.fetchFeed()
   }
 
+  handleRemoveFeed(){
+    this.props.removeFeed(this.props.redditFeedName)
+  }
+
   fetchFeed(){
     this.setState({fetching: true})
-    let url = "https://www.reddit.com/r/" + this.props.redditFeedName + "/top.json?limit=10"
+    let url = "https://www.reddit.com/" + this.props.redditFeedName + "/top.json?limit=10"
     Axios.get(url)
       .then(response =>{
         this.setState({
@@ -37,7 +43,16 @@ class RedditFeed extends React.Component {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            r/{this.props.redditFeedName}
+            {this.props.redditFeedName}
+            <Button
+              floated="right"
+              compact
+              icon
+              circular
+              onClick={this.handleRemoveFeed}
+            >
+              <Icon name='close' />
+            </Button>
           </Card.Header>
         </Card.Content>
         <Card.Content>
@@ -52,7 +67,16 @@ class RedditFeed extends React.Component {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            r/{this.props.redditFeedName}
+            {this.props.redditFeedName}
+            <Button
+              floated="right"
+              compact
+              icon
+              circular
+              onClick={this.handleRemoveFeed}
+            >
+              <Icon name='close' />
+            </Button>
           </Card.Header>
         </Card.Content>
         <Card.Content>

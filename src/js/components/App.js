@@ -23,7 +23,7 @@ class App extends Component {
   render() {
 
     let redditFeedsArray = this.props.redditStore.redditFeeds.map(redditFeedName => {
-      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName}/>
+      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName} removeFeed={this.props.redditStore.removeFeed} />
     })
 
     let youtubeDataArray = this.props.youtubeStore.youtubeFeeds.map(id => {
@@ -42,13 +42,9 @@ class App extends Component {
             linkStore={this.props.linkStore}
           />
           <Grid.Row>
-            <Grid.Column mobile={16} tablet={16} computer={16}>
-              <CustomLinks links={this.props.linkStore.links} />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
             { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
             {youtubeDataArray}
+            {redditFeedsArray}
           </Grid.Row>
         </Grid>
       </Container>

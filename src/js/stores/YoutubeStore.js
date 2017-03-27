@@ -20,7 +20,6 @@ class YoutubeStore {
 
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
     this.searchForChannel = this.searchForChannel.bind(this)
-    this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
     this.handleYoutubeSearchChange = this.handleYoutubeSearchChange.bind(this)
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this)
     this.removeFeed = this.removeFeed.bind(this)
@@ -32,6 +31,7 @@ class YoutubeStore {
   initializeYoutubeFeeds(){
     var self = this
     LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
+      console.log("youtube localforage", localYoutubeFeeds)
       if (localYoutubeFeeds !== null){
         self.youtubeFeeds = localYoutubeFeeds
       }
@@ -43,8 +43,8 @@ class YoutubeStore {
     LocalForage.setItem('localYoutubeFeeds', [...this.youtubeFeeds])
   }
 
-  // Loop trought feeds array and if string matching
-  // the given parameter is fround, delete it from store and localforage
+  // Loop trought feeds array and if id matching the given
+  // parameter is fround, delete it from store and localforage
   removeFeed(feed){
     for (var i = 0; i < this.youtubeFeeds.length; i++) {
       if (this.youtubeFeeds[i] === feed ) {
@@ -60,7 +60,9 @@ class YoutubeStore {
 
   handleYoutubeSearchChange(event){
     this.youtubeSearchTerm = event.target.value
-    this.searchForChannel()
+    if(this.youtubeSearchterm !== ""){
+      this.searchForChannel()
+    }
   }
 
 
@@ -75,6 +77,7 @@ class YoutubeStore {
     }
   }
 
+  // TODO: Implement delay and check for too many consecutive request
   searchForChannel(){
     this.searchLoading = true
     Axios.get('https://www.googleapis.com/youtube/v3/search', {
