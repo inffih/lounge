@@ -20,7 +20,7 @@ class YoutubeStore {
     this.initializeYoutubeFeeds()
 
     this.handleYoutubeChange = this.handleYoutubeChange.bind(this)
-    this.searchForChannel =  debounce(this.searchForChannel.bind(this), 350)
+    this.searchForChannel =  debounce(this.searchForChannel.bind(this), 400)
     this.handleYoutubeSearchChange =this.handleYoutubeSearchChange.bind(this)
     this.handleYoutubeSubmit = this.handleYoutubeSubmit.bind(this)
     this.removeFeed = this.removeFeed.bind(this)
@@ -72,6 +72,7 @@ class YoutubeStore {
   handleYoutubeSubmit(event, data){
     event.preventDefault()
     if( !this.youtubeFeeds.includes(data.id) ){
+      console.log(data.id)
       this.youtubeFeeds.push(data.id)
       this.handleLocalStorage()
       this.youtubeSearchTerm = ""

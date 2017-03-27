@@ -18,7 +18,7 @@ class RedditStore {
     this.initializeRedditFeeds()
 
     this.handleRedditChange = this.handleRedditChange.bind(this)
-    this.searchForSubreddit = debounce(this.searchForSubreddit.bind(this), 350)
+    this.searchForSubreddit = debounce(this.searchForSubreddit.bind(this), 400)
     this.handleRedditSearchChange = this.handleRedditSearchChange.bind(this)
     this.handleRedditSubmit = this.handleRedditSubmit.bind(this)
     this.removeFeed = this.removeFeed.bind(this)

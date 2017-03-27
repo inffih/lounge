@@ -28,6 +28,10 @@ class UiStore {
 
   }
 
+  clearLocalforage(){
+    LocalForage.clear()
+  }
+
   handleYoutubeErrorDismiss(){
     this.youtubeInputErrorMsgVisible = !this.youtubeInputErrorMsgVisible
   }

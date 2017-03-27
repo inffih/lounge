@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
-import { Grid, Radio, Header, Search } from 'semantic-ui-react'
+import { Grid, Radio, Header, Search, Button } from 'semantic-ui-react'
 import { observer } from 'mobx-react'
 
 @observer
 class Menu extends Component {
+
+  clearFeeds(){
+    this.props.uiStore.clearLocalforage()
+    this.props.uiStore.hackernewsVisible = false
+    this.props.youtubeStore.youtubeFeeds = []
+    this.props.redditStore.redditFeeds = []
+  }
 
   render(){
     return (
@@ -30,10 +37,16 @@ class Menu extends Component {
           />
         </Grid.Column>
 
-        <Grid.Column mobile={16} tablet={8} computer={4}>
-          <Header as="h5">Toggle show Hackernews</Header>
+        <Grid.Column mobile={16} tablet={8} computer={2}>
+          <Header as="h5">Show Hackernews</Header>
           <Radio toggle onClick={this.props.uiStore.toggleHackernews} checked={this.props.uiStore.hackernewsVisible}/>
         </Grid.Column>
+
+        <Grid.Column mobile={16} tablet={8} computer={2}>
+          <Header as="h5">Clear all feeds</Header>
+          <Button onClick={this.clearFeeds.bind(this)}>Clear</Button>
+        </Grid.Column>
+
       </Grid.Row>
     )
   }
