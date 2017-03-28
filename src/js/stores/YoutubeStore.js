@@ -31,7 +31,6 @@ class YoutubeStore {
   initializeYoutubeFeeds(){
     var self = this
     LocalForage.getItem('localYoutubeFeeds').then(function(localYoutubeFeeds){
-      console.log("youtube localforage", localYoutubeFeeds)
       if (localYoutubeFeeds !== null){
         self.youtubeFeeds = localYoutubeFeeds
         // fetch feeds to store

@@ -30,7 +30,6 @@ class RedditStore {
   initializeRedditFeeds(){
     var self = this
     LocalForage.getItem('localRedditFeeds').then(function(localRedditFeeds){
-      console.log("reddit localforage", localRedditFeeds)
       if (localRedditFeeds !== null){
         self.redditFeeds = localRedditFeeds
         // fetch feeds to store

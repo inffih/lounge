@@ -10,6 +10,8 @@ class Menu extends Component {
     this.props.uiStore.hackernewsVisible = false
     this.props.youtubeStore.youtubeFeeds = []
     this.props.redditStore.redditFeeds = []
+    this.props.youtubeStore.youtubeData = []
+    this.props.redditStore.redditData = []
   }
 
   render(){

@@ -1,7 +1,5 @@
 import React from 'react'
 import RedditFeedItem from './RedditFeedItem'
-import Axios from 'axios'
-import LoaderComponent from './LoaderComponent'
 import { Card, Grid, Button, Icon } from 'semantic-ui-react'
 
 class RedditFeed extends React.Component {

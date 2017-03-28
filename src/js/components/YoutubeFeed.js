@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import YoutubeFeedItem from './YoutubeFeedItem'
 import { Card, Grid, Button, Icon } from 'semantic-ui-react'
-import LoaderComponent from './LoaderComponent'
-import Axios from 'axios'
 
 class YoutubeFeed extends Component {
 
@@ -19,7 +17,6 @@ class YoutubeFeed extends Component {
 
   // UI component for videolist
   showContent() {
-    console.log(this.props)
     return (
       <Card fluid>
         <Card.Content>
