@@ -6,6 +6,7 @@ import debounce from 'debounce'
 class RedditStore {
   @observable redditValue = ''
   @observable redditFeeds = []
+  @observable redditData = []
   @observable redditSubreddits = []
   @observable redditSearchterm = ''
   @observable searchLoading = false
@@ -32,13 +33,32 @@ class RedditStore {
       console.log("reddit localforage", localRedditFeeds)
       if (localRedditFeeds !== null){
         self.redditFeeds = localRedditFeeds
+        // fetch feeds to store
+        localRedditFeeds.forEach(function(feed){
+          self.fetchFeed(feed)
+        })
       }
     })
   }
 
-  // Loop trought feeds array and if string matching
+  fetchFeed(title){
+    let url = "https://www.reddit.com/" + title + "/top.json?limit=10"
+    Axios.get(url)
+      .then(response =>{
+        this.redditData.push({name: title, data: response.data.data.children})
+      })
+  }
+
+  // Loop trought feeds arrays and if string matching
   // the given parameter is fround, delete it from store and localforage
+  // Reddit data is the actual feed data RedditFeeds is array of subreddit names
+  // TODO: This process could be optimized
   removeFeed(feed){
+    for (var i = 0; i < this.redditData.length; i++) {
+      if (this.redditData[i].name === feed ) {
+        this.redditData.splice(i, 1)
+      }
+    }
     for (var i = 0; i < this.redditFeeds.length; i++) {
       if (this.redditFeeds[i] === feed ) {
         this.redditFeeds.splice(i, 1)
@@ -55,9 +75,9 @@ class RedditStore {
   // Check if submitted does not exist yet
   // If not, then pass value to store and localforage
   handleRedditSubmit(event, data){
-    console.log("handling submit for ", data)
     event.preventDefault()
     if( !this.redditFeeds.includes(data.title) ){
+      this.fetchFeed(data.title)
       this.redditFeeds.push(data.title)
       this.handleLocalStorage()
       this.redditSearchterm = ""

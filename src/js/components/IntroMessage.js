@@ -8,13 +8,14 @@ const Content = () => {
         <List.Item as="li" style={{marginBottom: 10}}>
           This page is designed to serve as a startpage for your browser.
           You can add feeds and links to the page by using the input fields below.
-          Feeds can also be deleted by clicking the feed's close button.
         </List.Item>
         <List.Item as="li" style={{marginBottom: 10}}>
-          Please note that when adding Reddit and YouTube feeds,
-          you should only include the name without any other characters.
-          For example for YouTube you would only import the channel's name found in the channel's URL eg. <i>www.youtube.com/</i><b>channelname</b>
+        Feeds can be deleted by clicking the feed's close button, or 'Clear all feeds'.
         </List.Item>
+        <List.Item as="li" style={{marginBottom: 10}}>
+          Feeds are stored in to the browser's cache, so deleting browser history will also delete added feeds!    
+        </List.Item>
+
       </List>
     </div>
   )

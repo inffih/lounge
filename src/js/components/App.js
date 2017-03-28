@@ -4,11 +4,11 @@ import RedditFeed from './RedditFeed'
 import YoutubeFeed from './YoutubeFeed'
 import { Grid, Container } from 'semantic-ui-react'
 import CustomLinks from './CustomLinks'
-// import Masonry from 'react-masonry-component'
 import Menu from './Menu'
 import IntroMessage from './IntroMessage'
 import PageHeader from './PageHeader'
 import { observer } from 'mobx-react'
+import StackGrid from 'react-stack-grid'
 
 @observer
 class App extends Component {
@@ -16,20 +16,21 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      youtubeFeedsArray: []
+      combinedArray: []
     }
   }
 
+  combineFeedElements(){
+    let youtubeDataArray = this.props.youtubeStore.youtubeData.map((youtubeFeed, index) => {
+      return <YoutubeFeed key={youtubeFeed.channelId} id={youtubeFeed.channelId} data={youtubeFeed.data} title={youtubeFeed.title} removeFeed={this.props.youtubeStore.removeFeed} />
+    })
+    let redditFeedsArray = this.props.redditStore.redditData.map(redditFeed => {
+      return <RedditFeed key={redditFeed.name} name={redditFeed.name} feed={redditFeed.data} removeFeed={this.props.redditStore.removeFeed} />
+    })
+    return [...youtubeDataArray, ...redditFeedsArray]
+  }
+
   render() {
-
-    let redditFeedsArray = this.props.redditStore.redditFeeds.map(redditFeedName => {
-      return <RedditFeed key={redditFeedName} redditFeedName={redditFeedName} removeFeed={this.props.redditStore.removeFeed} />
-    })
-
-    let youtubeDataArray = this.props.youtubeStore.youtubeFeeds.map(id => {
-      return <YoutubeFeed key={id} id={id} removeFeed={this.props.youtubeStore.removeFeed} />
-    })
-
     return (
       <Container>
         <PageHeader toggleHelp={this.props.uiStore.toggleIntroMessage}/>
@@ -43,10 +44,16 @@ class App extends Component {
           />
           <Grid.Row>
             { this.props.uiStore.hackernewsVisible ? <Hackernews/> : null }
-            {youtubeDataArray}
-            {redditFeedsArray}
           </Grid.Row>
         </Grid>
+        <StackGrid
+          columnWidth={265}
+          gutterWidth={20}
+          gutterHeight={20}
+          duration={0}
+        >
+        {this.combineFeedElements()}
+        </StackGrid>
       </Container>
     );
   }

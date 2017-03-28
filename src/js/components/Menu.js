@@ -38,8 +38,8 @@ class Menu extends Component {
         </Grid.Column>
 
         <Grid.Column mobile={16} tablet={8} computer={2}>
-          <Header as="h5">Show Hackernews</Header>
-          <Radio toggle onClick={this.props.uiStore.toggleHackernews} checked={this.props.uiStore.hackernewsVisible}/>
+          <Header as="h5">Show Hackernews (coming soon)</Header>
+          <Radio toggle disabled onClick={this.props.uiStore.toggleHackernews} checked={this.props.uiStore.hackernewsVisible}/>
         </Grid.Column>
 
         <Grid.Column mobile={16} tablet={8} computer={2}>
